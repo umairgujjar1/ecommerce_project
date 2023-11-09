@@ -31,6 +31,8 @@
     <meta name="twitter:image" content="" />
     <meta name="twitter:image:alt" content="" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
 
     <link rel="stylesheet" type="text/css" href="{{ asset('front_end_assets/css/slick.css') }}" />
@@ -62,9 +64,9 @@
                 </div>
                 <div class="col-lg-6 col-6 text-left  d-flex justify-content-end align-items-center">
                     <a href="account.php" class="nav-link text-dark">My Account</a>
-                    <form action="{{route('user.shop')}}" method="GET">
+                    <form action="{{ route('user.shop') }}" method="GET">
                         <div class="input-group">
-                            <input type="text" placeholder="Search For Products" name="search"   class="form-control"
+                            <input type="text" placeholder="Search For Products" name="search" class="form-control"
                                 aria-label="Amount (to the nearest dollar)">
                             <span class="input-group-text">
                                 <i class="fa fa-search"></i>
@@ -107,7 +109,8 @@
                                         <ul class="dropdown-menu dropdown-menu-dark">
                                             @foreach ($category->sub_category as $subcategory)
                                                 <li><a class="dropdown-item nav-link"
-                                                        href="{{ route('user.shop', [$category->slug, $subcategory->slug]) }}">{{ $subcategory->name }}</a></li>
+                                                        href="{{ route('user.shop', [$category->slug, $subcategory->slug]) }}">{{ $subcategory->name }}</a>
+                                                </li>
                                             @endforeach
                                         </ul>
                                     @endif
@@ -207,7 +210,36 @@
                 navbar.classList.remove("sticky");
             }
         }
+
+
     </script>
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
+    <script type="text/javascript">
+         function addToCart(id) {
+            $.ajax({
+                url: '{{ route('user.addToCart') }}',
+                type: 'post',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status == true) {
+                        window.location.href = "{{ route('user.cart') }}";
+                    }else{
+                        alert(response.message);
+                    }
+                }
+            });
+        }
+    </script>
+
     @yield('custom_js')
 </body>
 

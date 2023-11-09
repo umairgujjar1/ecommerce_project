@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\productsController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\TempImageController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
@@ -42,7 +43,10 @@ route::get('/product/{slug}',[ShopController::class,'product'])->name('user.prod
 
 
 Route::get('/add_cart',[CartController::class,'cart'])->name('user.cart');
+Route::post('/add_cart',[CartController::class,'addToCart'])->name('user.addToCart');
+Route::post('/update_cart',[CartController::class,'updateCart'])->name('user.update_cart');
 
+Route::get('register-acoount',[AuthController::class,'register'])->name('account.register');
 
 
 
